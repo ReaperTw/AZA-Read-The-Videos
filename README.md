@@ -5,10 +5,12 @@
 ## 安裝
 
 1. 安裝 Tampermonkey。
-2. 打開 [read-the-videos.user.js](https://raw.githubusercontent.com/ReaperTw/AZA-RTV/main/read-the-videos.user.js)，確認安裝。
+2. 打開 [read-the-videos.user.js](https://raw.githubusercontent.com/ReaperTw/AZA-Read-The-Videos/main/read-the-videos.user.js)，確認安裝。
 3. 重新整理 YouTube 與 Gemini 頁面。
 
 之後提高 `@version` 並推上 `main`，Tampermonkey 會偵測更新。已手動貼上的舊腳本要先改用上面的網址安裝一次，才會跟著遠端更新。
+
+0.5.14：GitHub 專案改名為 `AZA-Read-The-Videos`，安裝與自動更新網址已同步。保留舊 `@namespace` 作為既有腳本的固定識別碼，避免被視為另一支腳本；不是舊 repo 仍未改名。
 
 ## 使用
 

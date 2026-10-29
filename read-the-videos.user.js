@@ -2,14 +2,14 @@
 // @name         Read The Videos - YouTube to Gemini
 // @namespace    https://github.com/ReaperTw/AZA-RTV
 // @author       AzazelTw_
-// @version      0.5.13
+// @version      0.5.14
 // @description  Semi-automatic YouTube triage and Obsidian note prompts for Gemini. Sending is always manual.
 // @match        https://www.youtube.com/*
 // @match        https://gemini.google.com/*
 // @grant        GM_openInTab
 // @grant        GM_setClipboard
-// @updateURL    https://raw.githubusercontent.com/ReaperTw/AZA-RTV/main/read-the-videos.user.js
-// @downloadURL  https://raw.githubusercontent.com/ReaperTw/AZA-RTV/main/read-the-videos.user.js
+// @updateURL    https://raw.githubusercontent.com/ReaperTw/AZA-Read-The-Videos/main/read-the-videos.user.js
+// @downloadURL  https://raw.githubusercontent.com/ReaperTw/AZA-Read-The-Videos/main/read-the-videos.user.js
 // @run-at       document-idle
 // ==/UserScript==
 
