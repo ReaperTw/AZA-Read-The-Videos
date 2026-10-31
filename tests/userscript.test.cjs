@@ -26,6 +26,9 @@ async function launch({ job, hash = '', storage = new Map(), youtube = false,
     closest() { return null; }
     setAttribute(key, value) { this.attributes[key] = value; }
     addEventListener(name, callback) { this.listeners[name] = callback; }
+    matches(selector) { return selector === ':popover-open' && Boolean(this.popoverOpen); }
+    showPopover() { this.popoverOpen = true; }
+    hidePopover() { this.popoverOpen = false; }
     focus() { document.activeElement = this; }
     dispatchEvent() {}
     get innerText() { return this.textContent; }
@@ -59,6 +62,7 @@ async function launch({ job, hash = '', storage = new Map(), youtube = false,
   }
   const document = {
     body, head: new Element(), documentElement: body, activeElement: null, title: jobA.title,
+    addEventListener() {},
     createElement: () => new Element(), getElementById: get, querySelector: () => null,
     querySelectorAll(selector) {
       if (selector === '#top-level-buttons-computed') return [row];
@@ -93,7 +97,8 @@ async function launch({ job, hash = '', storage = new Map(), youtube = false,
       app.opened.push(url);
     },
     GM_getValue: () => { throw new Error('Legacy global storage must not be used'); },
-    window: { confirm: message => { app.confirmations.push(message); return app.allow; } },
+    window: { innerWidth: 1280, innerHeight: 720, addEventListener() {},
+      confirm: message => { app.confirmations.push(message); return app.allow; } },
     MutationObserver: class { observe() {} },
     setTimeout: callback => { timers.push(callback); }
   });

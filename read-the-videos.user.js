@@ -2,7 +2,7 @@
 // @name         Read The Videos - YouTube to Gemini
 // @namespace    https://github.com/ReaperTw/AZA-RTV
 // @author       AzazelTw_
-// @version      0.5.14
+// @version      0.5.15
 // @description  Semi-automatic YouTube triage and Obsidian note prompts for Gemini. Sending is always manual.
 // @match        https://www.youtube.com/*
 // @match        https://gemini.google.com/*
@@ -124,9 +124,11 @@
       }
       #rtv-youtube-button { margin: 0; height: 40px; min-width: max-content; }
       #rtv-youtube-menu {
-        position: absolute; top: 44px; left: 0; z-index: 20;
-        flex-direction: column; gap: 4px; min-width: 100%;
+        position: fixed; inset: auto; margin: 0; padding: 0; border: 0;
+        background: transparent; color: inherit; overflow: visible;
+        flex-direction: column; gap: 4px; box-sizing: border-box;
       }
+      #rtv-youtube-menu:popover-open { display: flex; }
       #rtv-youtube-menu .rtv-button { height: 36px; width: 100%; }
     `;
     document.head.appendChild(style);
@@ -281,16 +283,32 @@ ${ENVELOPE}`;
     button.setAttribute('aria-controls', 'rtv-youtube-menu');
     const menu = document.createElement('div');
     menu.id = 'rtv-youtube-menu';
-    menu.style.display = 'none';
+    // Top layer avoids clipping by YouTube's horizontally scrolling action row.
+    menu.setAttribute('popover', 'auto');
 
-    let menuOpen = false;
     let openedByKeyboard = false;
     let busy = false;
     const setMenu = (open) => {
-      menuOpen = open;
-      menu.style.display = open ? 'flex' : 'none';
+      if (open) {
+        const rect = button.getBoundingClientRect();
+        menu.style.width = `${rect.width}px`;
+        menu.showPopover();
+        menu.style.left = `${Math.max(12, Math.min(rect.left, window.innerWidth - menu.offsetWidth - 12))}px`;
+        menu.style.top = `${rect.bottom + 4 + menu.offsetHeight <= window.innerHeight - 12
+          ? rect.bottom + 4 : Math.max(12, rect.top - menu.offsetHeight - 4)}px`;
+      } else {
+        menu.hidePopover();
+      }
       button.setAttribute('aria-expanded', String(open));
     };
+    menu.addEventListener('beforetoggle', (event) => {
+      button.setAttribute('aria-expanded', String(event.newState === 'open'));
+    });
+    const closeMenu = () => {
+      if (menu.matches(':popover-open')) setMenu(false);
+    };
+    document.addEventListener('scroll', closeMenu, true);
+    window.addEventListener('resize', closeMenu);
     const send = async (mode) => {
       if (busy) return;
       busy = true;
@@ -338,7 +356,7 @@ ${ENVELOPE}`;
     });
     button.addEventListener('click', () => {
       if (busy || button.disabled) return;
-      const willOpen = !menuOpen;
+      const willOpen = !menu.matches(':popover-open');
       setMenu(willOpen);
       if (willOpen && openedByKeyboard) {
         choices[0]?.focus?.();
